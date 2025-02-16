@@ -5,12 +5,17 @@ import {
 } from "@tanstack/react-query";
 import { ActionDispatch, Context, ReactNode, useContext } from "react";
 
-export type WidgetStateUpdate<Type extends string, Payload = unknown> = {
+export type WidgetStateAction<Type extends string, Payload = undefined> = {
   type: Type;
   payload: Payload;
 };
 
-export type WidgetContext<Data, State, StateUpdate, Event extends WidgetEvent = WidgetEvent> = {
+export type WidgetContext<
+  Data,
+  State,
+  StateAction extends WidgetStateAction<string, unknown>,
+  Event extends WidgetEvent = WidgetEvent
+> = {
   fetchStatus: FetchStatus;
   status: "error" | "success" | "pending";
   isFetching: boolean;
@@ -21,9 +26,9 @@ export type WidgetContext<Data, State, StateUpdate, Event extends WidgetEvent = 
   state: State;
   emit: WidgetEventListener<Event>;
   refetch: (
-    options: RefetchOptions
+    options?: RefetchOptions
   ) => Promise<QueryObserverResult<Data, Error>>;
-  dispatch: ActionDispatch<[update: StateUpdate]>;
+  dispatch: ActionDispatch<[update: StateAction]>;
 };
 
 export function createContextHook<T>(context: Context<T | undefined>) {
@@ -36,12 +41,14 @@ export function createContextHook<T>(context: Context<T | undefined>) {
   };
 }
 
-export type WidgetEvent<Type extends string = string, Payload = undefined> = {
+export type WidgetEvent<Type extends string = string, Payload = unknown> = {
   type: Type;
   payload: Payload;
 };
 
-export type WidgetEventListener<Event extends WidgetEvent = WidgetEvent> = (event: Event) => void | Promise<void>;
+export type WidgetEventListener<Event extends WidgetEvent = WidgetEvent> = (
+  event: Event
+) => void | Promise<void>;
 
 export type WidgetProps<
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
