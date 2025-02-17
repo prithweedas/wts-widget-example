@@ -37,8 +37,8 @@ export async function unrealisedGainLossLoader(
   console.log(inputs);
   await new Promise((resolve) => setTimeout(resolve, 3000));
   return {
-    unrealisedGainLoss: 0,
-    unrealisedGainLossPercentage: 0,
+    unrealisedGainLoss: parseFloat((Math.random() * 1000).toFixed(2)),
+    unrealisedGainLossPercentage: parseFloat((Math.random() * 100).toFixed(2)),
   };
 }
 
@@ -170,7 +170,45 @@ export function UnrealisedGainLossWidgetUI() {
   }
 
   return (
-    <div>
+    <div style={{ padding: "20px", border: "1px solid black", margin: '20px' }}>
+      <div style={{ display: "flex", gap: "10px" }}>
+        <button
+          onClick={() =>
+            context.dispatch({ type: "set-timeframe", payload: "1d" })
+          }
+        >
+          1d
+        </button>
+        <button
+          onClick={() =>
+            context.dispatch({ type: "set-timeframe", payload: "1w" })
+          }
+        >
+          1w
+        </button>
+        <button
+          onClick={() =>
+            context.dispatch({ type: "set-timeframe", payload: "1m" })
+          }
+        >
+          1m
+        </button>
+        <button
+          onClick={() =>
+            context.dispatch({ type: "set-timeframe", payload: "1y" })
+          }
+        >
+          1y
+        </button>
+      </div>
+      <br />
+      <br />
+      <p>Timeframe: {context.state.timeframe}</p>
+      <br />
+      <br />
+      <p>Unrealised Gain/Loss</p>
+      <br />
+      <br />
       <p>Absolute G/L: {context.data.unrealisedGainLoss}</p>
       <p>Percentage G/L: {context.data.unrealisedGainLossPercentage}</p>
       <br />
